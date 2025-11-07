@@ -39,4 +39,27 @@ I will start with 1.
 - dashboard looks good now with average over time for trend and current usage, now I want more readable legend names
 - running average with a viewed interval might be confusing, but it is good to see trends over different times quickly
 - panel will repeat for all selected isntaces up to 4 times, the way this is configured should be defined by the number of isntances if its a large nubmer a diffren approach would be better
-- chagned instance varaible to refrsh when range is cahgned so new instances are picked up fast
+- changed instance variable to refresh when the range is changed so new instances are picked up fast
+- commit the exported json to the repo as the first version
+- this can be imported in the grafana UI or placed in a grafana folder which mounts into the docker container
+
+### observability as code approach
+
+#### thoughts:
+
+- a pipeline could mean running tests, exports, validation and deploying dashboard to grafana
+    - but there is only local grafan give so push/deplopy where?
+    - this could be done locally with a makefile or using gh/gl actions/runners CICD
+- should I include the whole demo repo in my repo? I fell liek this is not very clean but lets start with it
+
+### process:
+
+- set up java module with java 21, need to find out if the sdk is made for 21
+- also sdk should work with a Grafana version from the demo repo
+- it seems like the Grafana foundation sdk is not published yet, so I might have to build it locally
+    - documentation only uses go and TypeScript but from public registries
+    - I found a GitHub repo using the foundation it uses the version: next-1759917807
+    - I will use this for now and will come back to the version later
+    - I looked online and found the grafana foundation sdk in the maven central repository with version
+      tags: https://central.sonatype.com/artifact/com.grafana/grafana-foundation-sdk
+- now I can start with the sdk for that I will scim through the documentation
