@@ -22,7 +22,7 @@ jobs:
 
       - name: Build and test
         working-directory: ./observability-as-code
-        run: mvn -q clean verify
+        run: mvn clean verify
 
       - name: Generate dashboard JSON
         working-directory: ./observability-as-code
