@@ -22,14 +22,14 @@ jobs:
 
       - name: Build and test
         working-directory: ./observability-as-code
-        run: mvn clean verify
+        run: mvn -q clean verify test
 
       - name: Generate dashboard JSON
         working-directory: ./observability-as-code
         run: mvn -q -DskipTests compile exec:java -Dexec.mainClass=org.example.Main
 
       - name: Verify dashboard was generated
-        run: test -f dashboards/cpu_usage_dashboard_generated.json
+        run: test -f observability-as-code/dashboards/cpu_usage_dashboard_generated.json
 
 #      - name: Download and Extract grafanactl
 #        run: |
@@ -44,11 +44,10 @@ jobs:
 #          GRAFANA_STACK_ID: ${{ vars.GRAFANA_STACK_ID }}
 #          GRAFANA_TOKEN: ${{ secrets.GRAFANA_TOKEN }}
 #        run: |
-#          if [ -f dashboards/cpu_usage_dashboard_generated.json ]; then
+#          if [ -f observability-as-code/dashboards/cpu_usage_dashboard_generated.json ]; then
 #            echo "dashboard.json exists, deploying dashboard."
-#            grafanactl resources push dashboards --path ./dashboards/cpu_usage_dashboard_generated.json
+#            grafanactl resources push dashboards --path ./observability-as-code/dashboards/cpu_usage_dashboard_generated.json
 #          else
-#            echo "dashboards/cpu_usage_dashboard_generated.json does not exist."
+#            echo "observability-as-code/dashboards/cpu_usage_dashboard_generated.json does not exist."
 #            exit 1
 #          fi
-#        working-directory: ./github-actions-example
