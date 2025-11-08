@@ -21,12 +21,15 @@ jobs:
           java-version: '21'
 
       - name: Build and test
+        working-directory: ./observability-as-code
         run: mvn -q clean verify
 
       - name: Generate dashboard JSON
-        run: |
-          mvn -q -DskipTests compile exec:java -Dexec.mainClass=org.example.Main
-          test -s dashboards/cpu_usage_generated.json
+        working-directory: ./observability-as-code
+        run: mvn -q -DskipTests compile exec:java -Dexec.mainClass=org.example.Main
+
+      - name: Verify dashboard was generated
+        run: test -f dashboards/cpu_usage_dashboard_generated.json
 
 #      - name: Download and Extract grafanactl
 #        run: |
