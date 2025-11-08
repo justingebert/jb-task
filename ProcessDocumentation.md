@@ -3,11 +3,11 @@
 Task: Prepare a Grafana dashboard for the cpu_usage metric
 
 I will try to complete expected Result 1 and then move on to 4.
-1 A JSON file with the Grafana dashboard
-4 A repository with an observability-as-code project (optionally using Grafana SDKs, pipelines, and documentation)
+
+- 1 A JSON file with the Grafana dashboard created from grafana UI
+- 4 A repository with an observability-as-code project (optionally using Grafana SDKs, pipelines, and documentation)
 
 I will start with 1.
-
 
 ## Notes for 1
 
@@ -43,6 +43,8 @@ I will start with 1.
 - commit the exported json to the repo as the first version
 - this can be imported in the grafana UI or placed in a grafana folder which mounts into the docker container
 
+## Notes for 4
+
 ### observability as code approach
 
 #### thoughts:
@@ -63,3 +65,34 @@ I will start with 1.
     - I looked online and found the grafana foundation sdk in the maven central repository with version
       tags: https://central.sonatype.com/artifact/com.grafana/grafana-foundation-sdk
 - now I can start with the sdk for that I will scim through the documentation
+- create a simple dashboard with cpu_usage metric using the sdk.
+- I will keep it simple for now and focus on integration now
+
+#### pipeline setup
+
+- i will create a GitHub action to test and run this program to generate a json, this would then be pushed to prod
+  grafana service
+    - since it's only running locally, I will comment out the part where it gets deployed using grafanactl
+- build and test, then generate a dashboard and deploy to grafana
+
+### add demo repo to this one:
+
+- add the demo repo as a git submodule to keep things clean
+- although i also thought about adding it manually and removing everything that is not needed for this usecase
+- I will keep it as a submodule for now but this means the setup with the smpt needs to be done for running it
+
+### final touches:
+
+- added comprehensive README with setup instructions, troubleshooting, and project structure
+- added unit tests to verify generated dashboard JSON
+- verified both dashboards import successfully into Grafana
+
+## submission checklist:
+
+- [x] JSON dashboard file (two versions: handcrafted + generated)
+- [x] README with description and usage instructions
+- [x] Public Git repository with demo-stand as submodule
+- [x] Observability-as-code project using Grafana Foundation SDK (Java)
+- [x] CI pipeline with build, test, deploy
+- [x] Unit tests for dashboard generation
+- [x] Complete documentation

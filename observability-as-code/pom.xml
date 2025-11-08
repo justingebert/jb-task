@@ -20,6 +20,12 @@
             <artifactId>grafana-foundation-sdk</artifactId>
             <version>11.6.0-1759917919</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.10.3</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

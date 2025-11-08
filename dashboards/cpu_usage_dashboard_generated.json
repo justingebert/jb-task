@@ -1,0 +1,31 @@
+{
+  "uid": "cpu-usage-generated",
+  "title": "CPU Usage",
+  "timezone": "browser",
+  "editable": true,
+  "graphTooltip": 0,
+  "fiscalYearStartMonth": 0,
+  "schemaVersion": 41,
+  "panels": [
+    {
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "cpu_usage",
+          "legendFormat": "{{instance}}",
+          "refId": ""
+        }
+      ],
+      "title": "CPU Usage",
+      "transparent": false,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      }
+    }
+  ],
+  "templating": {},
+  "annotations": {}
+}

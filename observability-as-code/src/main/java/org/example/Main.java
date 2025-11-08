@@ -11,8 +11,9 @@ import java.nio.file.Path;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+
         Dashboard dashboard = new DashboardBuilder("CPU Usage")
-                .uid("cpu-usage-simple")
+                .uid("cpu-usage-generated")
                 .withPanel(
                         new PanelBuilder<>()
                                 .title("CPU Usage")
@@ -25,7 +26,8 @@ public class Main {
                 )
                 .build();
 
-        Path out = Path.of("cpu_usage_dashboard.json");
+        Path out = Path.of("dashboards/cpu_usage_dashboard_generated.json");
+        Files.createDirectories(out.getParent()); // ensure 'dashboards' exists
         Files.writeString(out, dashboard.toJSON());
 
         System.out.println("Dashboard created: " + out.toAbsolutePath());
