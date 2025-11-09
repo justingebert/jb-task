@@ -4,8 +4,10 @@ Grafana dashboard for the `cpu_usage` metric with code-based generation using Gr
 
 ## Dashboards
 
-- `dashboards/CPU Usage handcrafted.json` - handcrafted from Grafana UI (full-featured)
-- `dashboards/cpu_usage_dashboard_generated.json` - generated from code (minimal)
+- `dashboards/CPU Usage handcrafted.json` - handcrafted from Grafana UI (full-featured, reference)
+- `observability-as-code/dashboards/cpu_usage_dashboard_generated.json` - generated from code (SDK demo)
+
+([ProcessDocumentation.md](ProcessDocumentation.md) contains more details about my thought process and decisions)
 
 ## Prerequisites
 
@@ -16,28 +18,49 @@ Grafana dashboard for the `cpu_usage` metric with code-based generation using Gr
 
 ## Quick Start
 
-### 1. Start demo environment
+### Option 1: Automatic Setup (Recommended)
+
+Use the Makefile to automate the entire pipeline:
+
+```bash
+make setup
+
+make start-demo
+
+make generate-metrics
+```
+
+Then access Grafana the dashboards at:
+
+- generated dashboard for CPU usage metrics: http://localhost:3000/d/cpu-usage-generated/cpu-usage-generated
+- handcrafted full feature dashboard for CPU usage metrics: http://localhost:3000/d/adh68m7/cpu-usage-handcrafted
+
+or find them in the /TestsFolder under Dashboards in Grafana UI.
+
+### Option 2: Manual Setup
+
+#### 1. Start demo environment
 
 ```bash
 cd demo
-cp smtp.env.example smtp.env #needs to be configured for docker compose to work
+cp environments/smtp.env.example environments/smtp.env
 docker compose up -d
 ```
 
 Wait for services to start, then verify:
 
-- Grafana: http://localhost:3000 (admin/admin)
+- Grafana: http://localhost:3000
 - Prometheus: http://localhost:9090
 
-### 2. Generate test metrics
+#### 2. Generate test metrics
 
 ```bash
-k6 run demo/k6/cpu_usage.js
+k6 run demo/testdata/1.cpu-usage.js
 ```
 
 This generates `cpu_usage` metric data with instances `server1` and `server2`.
 
-### 3. Generate dashboard from code
+#### 3. Generate dashboard from code
 
 ```bash
 cd observability-as-code
@@ -45,46 +68,45 @@ mvn clean install
 mvn exec:java -Dexec.mainClass=org.example.Main
 ```
 
-Output: `dashboards/cpu_usage_dashboard_generated.json`
+Output: `observability-as-code/dashboards/cpu_usage_dashboard_generated.json`
 
-### 4. Import to Grafana
+#### 4. Import to Grafana
 
+**Option A: Auto-load (copy to demo folder)**
+
+```bash
+cp observability-as-code/dashboards/cpu_usage_dashboard_generated.json demo/grafana/dashboards/definitions/
+cp dashboards/cpu_usage_handcrafted.json demo/grafana/dashboards/definitions/
+```
+
+**Option B: Manual import**
 - Open http://localhost:3000 (admin/admin)
 - **Dashboards** → **Import** → **Upload JSON file**
-- Select `dashboards/cpu_usage_dashboard_generated.json`
+- Select `observability-as-code/dashboards/cpu_usage_dashboard_generated.json`
 - Click **Import**
+- Do the same for `dashboards/cpu_usage_handcrafted.json`
 
-The dashboard will display CPU usage timeseries for all instances.
+Then access Grafana the dashboards at:
 
-## Development
+- generated dashboard for CPU usage metrics: http://localhost:3000/d/cpu-usage-generated/cpu-usage-generated
+- handcrafted full feature dashboard for CPU usage metrics: http://localhost:3000/d/adh68m7/cpu-usage-handcrafted
 
-### Run tests
-
-```bash
-cd observability-as-code
-mvn test
-```
-
-### Generate dashboard
-
-```bash
-cd observability-as-code
-mvn exec:java -Dexec.mainClass=org.example.Main
-```
+or find them in the /TestsFolder under Dashboards in Grafana UI.
 
 ### Project structure
 
 ```
 jb-task/
 ├── dashboards/                              # Dashboard JSONs
-│   ├── CPU Usage handcrafted.json           # Handcrafted
+│   ├── cpu_usage_handcrafted.json           # Handcrafted
 │   └── cpu_usage_dashboard_generated.json   # Generated
 ├── observability-as-code/                   # Java SDK project
 │   ├── src/
 │   │   ├── main/java/org/example/Main.java  # Generator
 │   │   └── test/java/org/example/           # Tests
 │   └── pom.xml
-├── demo/                                    # Git submodule
+├── demo/                                    # Git submodule - local grafana and prometheus demo
+├── Makefile                                 # local automation
 └── .github/workflows/ci.yml                 # CI pipeline
 ```
 
@@ -102,9 +124,9 @@ jb-task/
 ### Generated dashboard
 
 - Minimal timeseries panel
-- Query: `cpu_usage`
-- Legend shows all instances
 - Demonstrates SDK usage
+- Query: `cpu_usage`
+- Query: `avg_over_time(cpu_usage[5m])`
 
 ## CI/CD pipeline
 

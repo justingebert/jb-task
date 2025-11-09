@@ -83,7 +83,8 @@ I will start with 1.
 
 ### final touches:
 
-- added comprehensive README with setup instructions, troubleshooting, and project structure
+- added comprehensive README with setup instructions
+- add makefile for easy setup and local pipeline
 - added unit tests to verify generated dashboard JSON
 - verified both dashboards import successfully into Grafana
 

@@ -1,10 +1,15 @@
 {
   "uid": "cpu-usage-generated",
-  "title": "CPU Usage",
+  "title": "CPU Usage - generated",
   "timezone": "browser",
   "editable": true,
   "graphTooltip": 0,
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
   "fiscalYearStartMonth": 0,
+  "refresh": "30s",
   "schemaVersion": 41,
   "panels": [
     {
@@ -12,11 +17,16 @@
       "targets": [
         {
           "expr": "cpu_usage",
-          "legendFormat": "{{instance}}",
-          "refId": ""
+          "legendFormat": "current - {{instance}}",
+          "refId": "A"
+        },
+        {
+          "expr": "avg_over_time(cpu_usage[5m])",
+          "legendFormat": "5m avg - {{instance}}",
+          "refId": "B"
         }
       ],
-      "title": "CPU Usage",
+      "title": "CPU Usage (%)",
       "transparent": false,
       "gridPos": {
         "h": 9,
